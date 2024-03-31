@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:store_app/services/get_all_products.dart';
-import 'package:store_app/widgets/product_tile.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/cubits/get_all_products_cubit.dart';
+import 'package:store_app/models/product.dart';
+import 'package:store_app/widgets/products_grid_view.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  const HomeView({
+    super.key,
+  });
 
   static const String route = 'home';
 
@@ -15,22 +19,26 @@ class HomeView extends StatelessWidget {
         title: const Text("Shop"),
       ),
       body: RefreshIndicator(
-        onRefresh: () {
-          return GetAllProductsService().getAllProducts();
-        },
+        onRefresh: BlocProvider.of<GetAllProductsCubit>(context).getAllProducts,
         child: FutureBuilder(
-            future: GetAllProductsService().getAllProducts(),
-            builder: (context, snapshot) {
-              return GridView.builder(
-                itemCount: 6,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+          future:
+              BlocProvider.of<GetAllProductsCubit>(context).getAllProducts(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Product> products = snapshot.data as List<Product>;
+              return ProductsGridView(products: products);
+            } else {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32.0),
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                  ),
                 ),
-                itemBuilder: (context, index) {
-                  return const ProductTile();
-                },
               );
-            }),
+            }
+          },
+        ),
       ),
     );
   }

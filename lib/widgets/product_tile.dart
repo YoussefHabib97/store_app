@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/cubits/get_all_products_cubit.dart';
+import 'package:store_app/models/product.dart';
 import 'package:store_app/views/update_product_view.dart';
 
 class ProductTile extends StatelessWidget {
+  final Product product;
   const ProductTile({
     super.key,
+    required this.product,
   });
 
   @override
@@ -12,11 +17,15 @@ class ProductTile extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).push(
+          Navigator.of(context)
+              .push(
             MaterialPageRoute(
               builder: (context) => const UpdateProductView(),
             ),
-          );
+          )
+              .then((value) {
+            BlocProvider.of<GetAllProductsCubit>(context).getAllProducts();
+          });
         },
         child: Card(
           elevation: 5,
@@ -27,20 +36,26 @@ class ProductTile extends StatelessWidget {
                 SizedBox.square(
                   dimension: 85,
                   child: Image.network(
-                    'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
+                    product.image,
                   ),
                 ),
                 Column(
                   children: [
-                    const Text("Product Title"),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        product.title,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            "\$249.99",
-                            style: TextStyle(color: Colors.grey),
+                          Text(
+                            "\$${product.price}",
+                            style: const TextStyle(color: Colors.grey),
                           ),
                           IconButton(
                             onPressed: () {},

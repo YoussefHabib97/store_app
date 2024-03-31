@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/cubits/get_all_products_cubit.dart';
 import 'package:store_app/views/home_view.dart';
 
 void main() {
@@ -15,7 +17,10 @@ class MainApp extends StatelessWidget {
       routes: {
         HomeView.route: (context) => const HomeView(),
       },
-      initialRoute: HomeView.route,
+      home: BlocProvider(
+        create: (context) => GetAllProductsCubit(),
+        child: const HomeView(),
+      ),
     );
   }
 }
