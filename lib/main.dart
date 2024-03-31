@@ -16,11 +16,6 @@ class MainApp extends StatelessWidget {
         HomeView.route: (context) => const HomeView(),
       },
       initialRoute: HomeView.route,
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
     );
   }
 }

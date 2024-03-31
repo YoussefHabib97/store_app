@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/services/get_all_products.dart';
 import 'package:store_app/views/update_product_view.dart';
 
 class HomeView extends StatelessWidget {
@@ -8,6 +9,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GetAllProductsService().getAllProducts();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
